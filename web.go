@@ -1,6 +1,7 @@
 package main
 
 import (
+	"html/template"
 	"log"
 	"regexp"
 	"time"
@@ -102,6 +103,7 @@ func main() {
 		if err == nil {
 			rd.Expire(key, time.Minute*5)
 			r.Data("URL", url)
+			r.Data("JSURL", template.JSEscapeString(url))
 			r.HTML(200, "link")
 			return
 		}
@@ -122,6 +124,7 @@ func main() {
 		}
 		rd.Set(key, d.URL, time.Minute*5)
 		r.Data("URL", d.URL)
+		r.Data("JSURL", template.JSEscapeString(d.URL))
 		r.HTML(200, "link")
 	})
 
