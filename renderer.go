@@ -1,6 +1,10 @@
 package main
 
-import "ireul.com/web"
+import (
+	"net/http"
+
+	"ireul.com/web"
+)
 
 // Render wraps web.Context
 type Render struct {
@@ -25,6 +29,11 @@ func (r Render) JSON(code int, t interface{}) {
 // Error renders a error string
 func (r Render) Error(code int, t string) {
 	r.ctx.PlainText(code, []byte("ERROR: "+t))
+}
+
+// Found do a 302 redirection
+func (r Render) Found(url string) {
+	r.ctx.Redirect(url, http.StatusFound)
 }
 
 // Renderer mount renderer

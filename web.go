@@ -1,7 +1,6 @@
 package main
 
 import (
-	"html/template"
 	"log"
 	"regexp"
 	"time"
@@ -102,9 +101,7 @@ func main() {
 		url, err := rd.Get(key).Result()
 		if err == nil {
 			rd.Expire(key, time.Minute*5)
-			r.Data("URL", url)
-			r.Data("JSURL", template.JSEscapeString(url))
-			r.HTML(200, "link")
+			r.Found(url)
 			return
 		}
 		if err != nil && err != redis.Nil {
@@ -123,9 +120,7 @@ func main() {
 			return
 		}
 		rd.Set(key, d.URL, time.Minute*5)
-		r.Data("URL", d.URL)
-		r.Data("JSURL", template.JSEscapeString(d.URL))
-		r.HTML(200, "link")
+		r.Found(d.URL)
 	})
 
 	w.Run("127.0.0.1", c.Port)
