@@ -49,9 +49,12 @@ func main() {
 	}
 
 	// web
-	w := web.Classic()
+	w := web.New()
+	w.Use(web.Logger())
+	w.Use(web.Recovery())
+	w.Use(web.Static("public", web.StaticOptions{BinFS: true}))
 	w.SetEnv(c.Env)
-	w.Use(web.Renderer())
+	w.Use(web.Renderer(web.RenderOptions{BinFS: true}))
 	w.Use(Renderer())
 	w.Map(c)
 	w.Map(db)
